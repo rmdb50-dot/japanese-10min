@@ -1,14 +1,39 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#182b55"><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon-192.png"><title>매일 10분 일본어</title>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#182b55">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon-192.png">
+<title>매일 10분 일본어</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f3f6fc;color:#182235;font-family:system-ui,sans-serif}main{max-width:620px;margin:auto;padding:16px}.hero{background:linear-gradient(135deg,#182b55,#3568d4);color:white;padding:24px;border-radius:22px}.hero h1{margin:6px 0}.card{background:white;border:1px solid #e2e8f0;border-radius:18px;padding:18px;margin:12px 0}.muted{color:#68758a;font-size:14px}.jp{font-size:34px;font-weight:800;margin:16px 0 4px}.reading{color:#6b7890}.meaning{font-size:20px;font-weight:700;margin:10px 0}button{border:0;border-radius:12px;padding:13px 15px;font-weight:700;font-size:15px;background:#eaf1ff;color:#18376f;margin:4px;cursor:pointer}.primary{background:#3568d4;color:white}.bar{height:9px;background:#e9edf5;border-radius:9px;overflow:hidden}.bar span{display:block;height:100%;background:#26a477;width:0} .option{display:block;width:100%;text-align:left;margin:8px 0;background:#f6f8fc}footer{text-align:center;color:#7d8798;font-size:12px;padding:16px}
-</style></head><body><main>
-<header class="hero"><small>BEGINNER JAPANESE · DAILY 10 MINUTES</small><h1>매일 10분, 일본어로 말하기 🇯🇵</h1><p>듣고, 따라 말하고, 짧게 대답해요. 완벽하게 외우지 않아도 괜찮아요!</p></header>
-<section class="card"><div class="muted" id="day">1일차 · 오늘의 표현</div><div class="bar"><span id="progress"></span></div><div class="jp" id="jp"></div><div class="reading" id="reading"></div><div class="meaning" id="meaning"></div><p class="muted" id="tip"></p><button onclick="speak(.9)">🔊 보통 속도</button><button onclick="speak(.62)">🐢 천천히</button><button class="primary" onclick="next()">다음 표현 →</button></section>
-<section class="card"><b>오늘의 뜻 맞히기</b><p id="question"></p><div id="options"></div><p id="feedback" class="muted"></p></section>
-<section class="card"><b>내 학습 기록</b><p id="record" class="muted"></p><button onclick="reset()">기록 초기화</button></section>
-<footer>음성은 기기의 일본어 음성 지원에 따라 달라질 수 있어요. 학습 기록은 이 기기에 저장됩니다.</footer>
-</main><script>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fc;color:#182235;font-family:system-ui,-apple-system,sans-serif}main{max-width:680px;margin:auto;padding:15px}.hero{background:linear-gradient(135deg,#182b55,#3568d4);color:#fff;padding:22px;border-radius:22px}.hero h1{margin:7px 0}.muted{color:#718096;font-size:14px}.hero .muted{color:#dce7ff}.card{background:#fff;border:1px solid #e3e9f2;border-radius:18px;padding:17px;margin:12px 0;box-shadow:0 4px 14px #1c31500a}.tabs{display:flex;gap:6px;overflow:auto;margin:14px 0}.tabs button{white-space:nowrap}.tab.active{background:#19366f;color:#fff}button{border:0;border-radius:12px;padding:12px 14px;font-size:14px;font-weight:700;background:#eaf1ff;color:#19366f;margin:4px;cursor:pointer}.primary{background:#3568d4;color:white}.soft{background:#f1f4f9;color:#34445e}.jp{font-size:clamp(28px,7vw,38px);font-weight:850;line-height:1.45;margin:13px 0}.reading{font-size:18px;color:#65758d}.meaning{font-size:21px;font-weight:750;margin:12px 0}.tip{background:#f6f8fc;padding:11px;border-radius:12px;color:#53627a;font-size:14px}.row{display:flex;flex-wrap:wrap;align-items:center;gap:4px}.row>*{flex:1}.bar{height:9px;background:#e9edf5;border-radius:9px;overflow:hidden}.bar span{display:block;height:100%;background:#26a477;width:0;transition:width .2s}.option{display:block;width:100%;text-align:left;margin:7px 0;background:#f5f7fb}.option:disabled{opacity:1}.correct{background:#e2f7ed!important;color:#176b48}.wrong{background:#fff0ed!important;color:#a53b2b}.hiddenText{filter:blur(7px);user-select:none}.field{padding:12px;background:#f6f8fc;border-radius:12px;margin:8px 0}.field b{display:block;font-size:12px;color:#77849a;margin-bottom:5px}.field button{margin:0 4px 0 0;padding:7px 10px}.small{font-size:12px}.hide{display:none!important}.result{font-weight:700;min-height:24px;margin-top:10px}.pill{display:inline-block;background:#edf3ff;color:#31569a;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:700}footer{text-align:center;color:#8792a4;font-size:12px;padding:18px}
+</style>
+</head>
+<body><main>
+<header class="hero"><small>BEGINNER JAPANESE · DAILY 10 MINUTES</small><h1>매일 10분, 일본어로 말하기 🇯🇵</h1><p>읽고, 가리고, 떠올리고, 다시 말해요.</p><div class="row"><div><b id="totalDone">0</b><div class="muted">익힌 표현</div></div><div><b id="reviewCount">0</b><div class="muted">다시 복습할 표현</div></div><div><b id="todayCount">0</b><div class="muted">오늘 연습</div></div></div></header>
+<nav class="tabs"><button class="tab active" data-tab="study">📖 표현 학습</button><button class="tab" data-tab="quiz">🧠 기억 테스트</button><button class="tab" data-tab="review">🔁 틀린 표현 복습</button><button class="tab" data-tab="record">📊 학습 기록</button></nav>
+<section id="study" class="pane">
+<div class="card"><div class="row"><span class="pill" id="lessonNo">1 / 10</span><span class="muted" id="learnedLabel">아직 학습 전</span></div><div class="bar"><span id="progress"></span></div><div class="jp" id="jp"></div><div class="reading" id="reading"></div><div class="meaning" id="meaning"></div><p class="tip" id="tip"></p>
+<div class="row"><button onclick="speak(.9)">🔊 듣기</button><button onclick="speak(.62)">🐢 느리게 듣기</button><button onclick="repeatAudio()">🔁 3번 반복 듣기</button></div>
+<hr style="border:0;border-top:1px solid #edf0f5;margin:15px 0">
+<b>🙈 글자 가리고 기억하기</b><p class="muted">가리고 싶은 항목을 눌러 보세요. 머릿속으로 먼저 읽고 정답을 확인하세요.</p>
+<div class="field"><b>일본어</b><span id="jpField"></span> <button onclick="toggleField('jp')">가리기 / 보기</button></div>
+<div class="field"><b>한글 발음</b><span id="readingField"></span> <button onclick="toggleField('reading')">가리기 / 보기</button></div>
+<div class="field"><b>뜻</b><span id="meaningField"></span> <button onclick="toggleField('meaning')">가리기 / 보기</button></div>
+<div class="row"><button class="soft" onclick="markAgain()">아직 어려워요</button><button class="primary" onclick="markKnown()">외웠어요 ✓</button></div>
+<div class="row"><button onclick="prevLesson()">← 이전</button><button class="primary" onclick="nextLesson()">다음 표현 →</button></div>
+</div>
+<div class="card"><b>🔂 반복해서 익히기</b><p class="muted">원하는 횟수만큼 같은 문장을 듣고 따라 읽어 보세요.</p><div class="row"><button onclick="setRepeat(3)">3회</button><button onclick="setRepeat(5)">5회</button><button onclick="setRepeat(10)">10회</button></div><p id="repeatStatus" class="result">반복 횟수를 선택하세요.</p><button class="primary" onclick="startRepeat()">선택한 횟수만큼 듣기 시작</button><button class="soft" onclick="stopRepeat()">중지</button></div>
+</section>
+<section id="quiz" class="pane hide">
+<div class="card"><span class="pill">기억 테스트</span><h2>뜻을 기억하고 있나요?</h2><p class="muted">일본어 표현을 보고 알맞은 뜻을 골라 보세요.</p><div class="jp" id="quizJp"></div><div id="quizOptions"></div><p id="quizFeedback" class="result"></p><button class="primary" onclick="nextQuiz()">다음 문제 →</button></div>
+<div class="card"><b>✍️ 빈칸 떠올리기</b><p class="muted">뜻을 보고 일본어 표현을 머릿속으로 말해 보세요. 정답을 눌러 확인하세요.</p><div class="meaning" id="blankMeaning"></div><div id="blankAnswer" class="jp hide"></div><button class="primary" onclick="showBlank()">정답 보기</button><button onclick="nextBlank()">다른 문제</button></div>
+</section>
+<section id="review" class="pane hide"><div class="card"><h2>🔁 다시 복습할 표현</h2><p class="muted">어렵다고 표시한 표현이 여기에 모입니다.</p><div id="reviewList"></div></div></section>
+<section id="record" class="pane hide"><div class="card"><h2>📊 나의 학습 기록</h2><p id="recordText"></p><div class="bar"><span id="recordBar"></span></div><p class="muted">‘외웠어요’를 누른 표현은 학습 완료로 저장됩니다. 기록은 이 휴대폰 브라우저에 보관됩니다.</p><button onclick="resetProgress()">학습 기록 초기화</button></div></section>
+<footer>음성 재생은 기기의 일본어 음성 지원에 따라 달라질 수 있어요. 학습 기록은 이 기기에 저장됩니다.</footer>
+</main>
+<script>
 const lessons=[
 ["こんにちは","곤니치와","안녕하세요","낮에 만났을 때 쓰는 기본 인사",["안녕하세요","감사합니다","잘 자요"],0],
 ["ありがとうございます","아리가토 고자이마스","감사합니다","정중하게 감사할 때 사용해요",["실례합니다","감사합니다","안녕히 가세요"],1],
@@ -21,12 +46,29 @@ const lessons=[
 ["趣味は何ですか？","슈미와 난 데스카?","취미가 뭐예요?","대화를 시작하기 좋은 질문이에요",["어디에서 왔어요?","취미가 뭐예요?","이름이 뭐예요?"],1],
 ["韓国人です","칸코쿠진 데스","한국 사람입니다","자기소개에서 국적을 말할 때 써요",["일본 사람입니다","한국 사람입니다","학생입니다"],1]
 ];
-let index=Number(localStorage.j10index||0),completed=Number(localStorage.j10completed||0);
 const $=id=>document.getElementById(id);
-function render(){let l=lessons[index%lessons.length];$("day").textContent=(index+1)+"일차 · 오늘의 표현";$("jp").textContent=l[0];$("reading").textContent=l[1];$("meaning").textContent=l[2];$("tip").textContent=l[3];$("progress").style.width=((index%4+1)*25)+"%";$("question").textContent="「"+l[0]+"」의 뜻은?";$("options").innerHTML="";l[4].forEach((v,n)=>{let b=document.createElement("button");b.className="option";b.textContent=v;b.onclick=()=>{$("feedback").textContent=n===l[5]?"정답이에요! 잘했어요 👏":"괜찮아요. 정답은 "+l[4][l[5]]+"예요.";};$("options").append(b)});$("record").textContent="완료한 표현 "+completed+"개 · 현재 "+(index+1)+"일차";localStorage.j10index=index;localStorage.j10completed=completed}
-function speak(rate){if(!("speechSynthesis"in window)){alert("이 브라우저는 음성 재생을 지원하지 않아요.");return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(lessons[index%lessons.length][0]);u.lang="ja-JP";u.rate=rate;speechSynthesis.speak(u)}
-function next(){index++;completed++;render();$("feedback").textContent="좋아요! 다음 표현도 익혀봐요."}
-function reset(){if(confirm("학습 기록을 초기화할까요?")){index=0;completed=0;render();$("feedback").textContent=""}}
-render();
+let index=Number(localStorage.j10index||0)%lessons.length;
+let known=JSON.parse(localStorage.j10known||"[]"),review=JSON.parse(localStorage.j10review||"[]");
+let practiced=Number(localStorage.j10practiced||0),repeatN=3,repeatTimer=null,quizIndex=Math.floor(Math.random()*lessons.length),blankIndex=Math.floor(Math.random()*lessons.length),revealed={jp:false,reading:false,meaning:false};
+function save(){localStorage.j10index=index;localStorage.j10known=JSON.stringify(known);localStorage.j10review=JSON.stringify(review);localStorage.j10practiced=practiced}
+function stats(){$("totalDone").textContent=known.length;$("reviewCount").textContent=review.length;$("todayCount").textContent=practiced;$("recordText").textContent="전체 "+lessons.length+"개 중 "+known.length+"개 학습 완료 · 복습 필요 "+review.length+"개 · 누적 연습 "+practiced+"회";$("recordBar").style.width=(known.length/lessons.length*100)+"%"}
+function render(){let l=lessons[index];$("lessonNo").textContent=(index+1)+" / "+lessons.length;$("learnedLabel").textContent=known.includes(index)?"학습 완료 ✓":review.includes(index)?"복습 필요":"학습 중";$("progress").style.width=(known.length/lessons.length*100)+"%";$("jp").textContent=l[0];$("reading").textContent=l[1];$("meaning").textContent=l[2];$("tip").textContent="💡 "+l[3];$("jpField").textContent=l[0];$("readingField").textContent=l[1];$("meaningField").textContent=l[2];for(let k of ["jp","reading","meaning"])$(""+k+"Field").classList.toggle("hiddenText",!revealed[k]);stats()}
+function toggleField(k){revealed[k]=!revealed[k];render()}
+function speak(rate){if(!("speechSynthesis"in window)){alert("이 브라우저는 음성 재생을 지원하지 않아요.");return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(lessons[index][0]);u.lang="ja-JP";u.rate=rate;speechSynthesis.speak(u);practiced++;save();stats()}
+function setRepeat(n){repeatN=n;$("repeatStatus").textContent=n+"회 반복 듣기가 선택됐어요."}
+function startRepeat(){stopRepeat();let count=0;const play=()=>{if(count>=repeatN){$("repeatStatus").textContent=repeatN+"회 반복 완료! 소리 내어 따라 해보세요 👏";return}count++;$("repeatStatus").textContent=count+" / "+repeatN+"회 듣는 중";if(!("speechSynthesis"in window)){alert("음성 재생을 지원하지 않는 브라우저예요.");return}let u=new SpeechSynthesisUtterance(lessons[index][0]);u.lang="ja-JP";u.rate=.78;u.onend=()=>{if(count<repeatN)repeatTimer=setTimeout(play,650);else{$("repeatStatus").textContent=repeatN+"회 반복 완료! 직접 말해 보세요 👏";practiced+=repeatN;save();stats()}};speechSynthesis.speak(u)};play()}
+function stopRepeat(){clearTimeout(repeatTimer);if("speechSynthesis"in window)speechSynthesis.cancel()}
+function markKnown(){if(!known.includes(index))known.push(index);review=review.filter(x=>x!==index);practiced++;save();render();$("learnedLabel").textContent="잘했어요! 학습 완료 ✓"}
+function markAgain(){if(!review.includes(index))review.push(index);known=known.filter(x=>x!==index);save();render();$("learnedLabel").textContent="복습 목록에 저장했어요"}
+function nextLesson(){stopRepeat();index=(index+1)%lessons.length;revealed={jp:false,reading:false,meaning:false};save();render()}
+function prevLesson(){stopRepeat();index=(index-1+lessons.length)%lessons.length;revealed={jp:false,reading:false,meaning:false};save();render()}
+function nextQuiz(){quizIndex=(quizIndex+1)%lessons.length;renderQuiz()}
+function renderQuiz(){let l=lessons[quizIndex];$("quizJp").textContent=l[0];$("quizFeedback").textContent="";$("quizOptions").innerHTML="";let opts=[l[2],lessons[(quizIndex+3)%10][2],lessons[(quizIndex+6)%10][2]].sort(()=>Math.random()-.5);opts.forEach(v=>{let b=document.createElement("button");b.className="option";b.textContent=v;b.onclick=()=>{let ok=v===l[2];$("quizFeedback").textContent=ok?"정답이에요! 잘 기억했어요 🎉":"아쉬워요. 정답은 「"+l[2]+"」예요. 복습 목록에 넣었어요.";b.classList.add(ok?"correct":"wrong");if(!ok&&!review.includes(quizIndex)){review.push(quizIndex);save();stats()}practiced++;save();stats();[...$("quizOptions").children].forEach(x=>x.disabled=true)};$("quizOptions").append(b)})}
+function nextBlank(){blankIndex=(blankIndex+1)%lessons.length;$("blankMeaning").textContent=lessons[blankIndex][2];$("blankAnswer").textContent=lessons[blankIndex][0];$("blankAnswer").classList.add("hide")}
+function showBlank(){$("blankAnswer").classList.remove("hide")}
+function renderReview(){let box=$("reviewList");box.innerHTML="";if(!review.length){box.textContent="아직 복습할 표현이 없어요. 학습 중 어려운 표현에서 ‘아직 어려워요’를 눌러 보세요.";return}review.forEach(i=>{let l=lessons[i],d=document.createElement("div");d.className="field";let b=document.createElement("button");b.textContent="이 표현 공부하기";b.onclick=()=>{index=i;document.querySelector('[data-tab=study]').click();render()};d.innerHTML="<b>"+l[0]+"</b>"+l[1]+" · "+l[2]+" ";d.append(b);box.append(d)})}
+function resetProgress(){if(confirm("학습 완료와 복습 기록을 모두 초기화할까요?")){known=[];review=[];practiced=0;index=0;save();render();renderReview();stats()}}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".pane").forEach(x=>x.classList.add("hide"));b.classList.add("active");$(b.dataset.tab).classList.remove("hide");if(b.dataset.tab==="review")renderReview();if(b.dataset.tab==="record")stats()}));
+render();renderQuiz();nextBlank();
 if('serviceWorker'in navigator&&location.protocol.startsWith('http')){let waiting=null;const note=document.createElement('p');note.style.cssText='display:none;background:#eaf2ff;padding:12px;border-radius:12px';note.innerHTML='새 버전이 준비됐어요. <button id="updateNow">지금 업데이트</button>';document.querySelector('main').prepend(note);navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'}).then(reg=>{const show=w=>{waiting=w;note.style.display='block'};if(reg.waiting)show(reg.waiting);reg.addEventListener('updatefound',()=>{const w=reg.installing;if(w)w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)show(w)})});reg.update().catch(()=>{})});note.addEventListener('click',()=>waiting&&waiting.postMessage({type:'SKIP_WAITING'}));let refreshing=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!refreshing){refreshing=true;location.reload()}})}
 </script></body></html>
