@@ -1,4 +1,4 @@
-const CACHE_NAME = 'japanese-10min-v3';
+const CACHE_NAME = 'japanese-10min-v4';
 const APP_FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png'];
 
 self.addEventListener('install', event => {
